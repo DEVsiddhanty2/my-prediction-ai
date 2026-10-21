@@ -81,6 +81,20 @@ try:
             y.iloc[split:], X.iloc[split:]["Close"]
         )
 
+        actual_direction = (
+            y.iloc[split:].to_numpy()
+            > X.iloc[split:]["Close"].to_numpy()
+        )
+
+        predicted_direction = (
+            test_pred
+            > X.iloc[split:]["Close"].to_numpy()
+        )
+
+        directional_accuracy = (
+            actual_direction == predicted_direction
+        ).mean() * 100
+        
         model.fit(X, y)
         latest = df[features].dropna().iloc[[-1]]
         last_price = float(latest["Close"].iloc[0])
@@ -96,11 +110,11 @@ try:
     )
 
     st.write("Historical test MAE:", round(test_mae, 4))
-    st.write("Baseline MAE:", round(baseline_mae, 4))
-    st.caption(
-        "MAE is average absolute price error, in price units. "
-        "Lower is better. Test results do not guarantee future accuracy."
-    )
+st.write("Baseline MAE:", round(baseline_mae, 4))
+st.write(
+    "Directional accuracy:",
+    f"{directional_accuracy:.2f}%"
+)
 
     st.subheader("Recent historical prices")
     st.line_chart(data["Close"].tail(180))
