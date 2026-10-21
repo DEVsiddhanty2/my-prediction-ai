@@ -129,7 +129,7 @@ st.write(
     st.warning(
         "For education only, not financial advice. "
         "The model can be wrong. Do not trade based on this estimate alone." 
-except Exception as e:
+      except Exception as e:
         st.error(f"Prediction failed: {e}")
         st.info("Try again later if the market data provider is unavailable.") 
     
